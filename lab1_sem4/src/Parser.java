@@ -9,7 +9,7 @@ public class Parser implements AutoCloseable {
     private Reader reader;
     private Writer writer;
 
-    long totalRead = 0;
+    private long totalRead = 0;
 
     public Parser(Reader inputReader, Writer outputWriter) throws IOException {
         reader = inputReader;
