@@ -1,138 +1,50 @@
 package Factory;
 
-import Blocks.*;
-import Exceptions.UndefinedIdentificatorException;
-import Exceptions.UnknownWorkflowOperationException;
-import Exceptions.WorkflowException;
+import Blocks.WorkflowBlock;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Properties;
 
-public class WorkflowBlockFactory extends AbstractBlockFactory {
-    private static class Pair <K extends Class, V extends List> {
-        private K first;
-        private V second;
+public class WorkflowBlockFactory {
+    private static Properties config = new Properties();
 
-        public K getFirst() {
-            return first;
+    private WorkflowBlockFactory() throws IOException {
+        var configStream = WorkflowBlockFactory.class.getResourceAsStream("config.properties");
+        if (configStream == null) {
+            throw new IOException();
         }
 
-        public V getSecond() {
-            return second;
-        }
-
-        public void setFirst(K first) {
-            this.first = first;
-        }
-
-        public void setSecond(V second) {
-            this.second = second;
-        }
+        config.load(configStream);
     }
 
-    private Map <Integer, Pair <Class, ArrayList <String>>> configStorage;
+    private static volatile WorkflowBlockFactory instance;
 
-    private List <Integer> workflowSequence;
-    private int stageOfExecution = 0;
-    private List <String> curArgs;
-
-    public WorkflowBlockFactory() throws IOException, WorkflowException {
-        configStorage = new TreeMap<>();
-        workflowSequence = new ArrayList<>();
-
-        getConfig();
-    }
-
-    public Class getBlockByID() throws UndefinedIdentificatorException {
-        int curStage = workflowSequence.get(stageOfExecution);
-        stageOfExecution++;
-
-        if (!configStorage.containsKey(curStage)) {
-            throw new UndefinedIdentificatorException();
-        }
-
-        curArgs = configStorage.get(curStage).getSecond();
-        return configStorage.get(curStage).getFirst();
-    }
-
-    @Override
-    public void getConfig() throws IOException, NumberFormatException, WorkflowException {
-        BufferedReader reader = new BufferedReader(
-                                    new InputStreamReader(
-                                            WorkflowBlockFactory.class.getResourceAsStream("workflow.txt")));
-
-        boolean definesReadEnded = false;
-        while (reader.ready()) {
-            String[] arrayOfKeyWords = reader.readLine().split(" +");
-            String stringLiteralOfId = arrayOfKeyWords[0];
-
-            if (!definesReadEnded) {
-                switch (stringLiteralOfId) {
-                    case "desc":
-                        break;
-                    case "csed":
-                        definesReadEnded = true;
-                        break;
-                    default:
-                        int curId = Integer.parseInt(stringLiteralOfId);
-                        String operationId = arrayOfKeyWords[2];
-
-                        ArrayList <String> arguments = new ArrayList<>();
-                        arguments.addAll(Arrays.asList(arrayOfKeyWords).subList(3, arrayOfKeyWords.length));
-
-                        Pair<Class, ArrayList<String>> associationWithId = new Pair<>();
-
-                        switch (operationId) {
-                            case "readfile":
-                                associationWithId.setFirst(WorkflowFileReader.class);
-                                associationWithId.setSecond(arguments);
-                                configStorage.put(curId, associationWithId);
-                                break;
-                            case "writefile":
-                                associationWithId.setFirst(WorkflowFileWriter.class);
-                                associationWithId.setSecond(arguments);
-                                configStorage.put(curId, associationWithId);
-                                break;
-                            case "sort":
-                                associationWithId.setFirst(WorkflowLexicalSorter.class);
-                                associationWithId.setSecond(arguments);
-                                configStorage.put(curId, associationWithId);
-                                break;
-                            case "grep":
-                                associationWithId.setFirst(WorkflowGrep.class);
-                                associationWithId.setSecond(arguments);
-                                configStorage.put(curId, associationWithId);
-                                break;
-                            case "replace":
-                                associationWithId.setFirst(WorkflowReplacer.class);
-                                associationWithId.setSecond(arguments);
-                                configStorage.put(curId, associationWithId);
-                                break;
-                            case "dump":
-                                associationWithId.setFirst(WorkflowDump.class);
-                                associationWithId.setSecond(arguments);
-                                configStorage.put(curId, associationWithId);
-                                break;
-                            default:
-                                throw new UnknownWorkflowOperationException();
-                        }
+    public static WorkflowBlockFactory getInstance() throws IOException {
+        if (instance == null) {
+            synchronized (WorkflowBlockFactory.class) {
+                if (instance == null) {
+                    instance = new WorkflowBlockFactory();
                 }
-            } else {
-                for (String line  : arrayOfKeyWords) {
-                    boolean isValid = !line.equals("->");
-                    if (isValid) {
-                        workflowSequence.add(Integer.parseInt(line));
-                    }
-                }
-                break;
             }
         }
+
+        return instance;
     }
 
-    public List<String> getCurArgsToExecute() {
-        return curArgs;
+    public WorkflowBlock getBlock(String name) throws Exception {
+        if (!config.containsKey(name)) {
+            throw new Exception("Command not found!");
+        }
+
+        WorkflowBlock block;
+        try {
+            var classOfBlock = Class.forName(config.getProperty(name));
+            var objectOfBlock = classOfBlock.getDeclaredConstructor().newInstance();
+            block = (WorkflowBlock)objectOfBlock;
+        } catch (Exception e) {
+            throw new Exception("Unable to create!");
+        }
+
+        return block;
     }
 }

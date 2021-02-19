@@ -7,5 +7,5 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class WorkflowBlock {
-    public abstract void execute(List <String> args, ArrayList <String> text) throws WorkflowException, IOException;
+    public abstract ArrayList <String> execute(List <String> args, ArrayList <String> text) throws WorkflowException, IOException;
 }

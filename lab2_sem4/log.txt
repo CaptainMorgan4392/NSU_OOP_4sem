@@ -1,0 +1,28 @@
+февр. 20, 2021 2:18:21 AM SimpleTest runAll
+INFO: Running test...
+февр. 20, 2021 2:18:21 AM Blocks.WorkflowFileReader <clinit>
+INFO: Created successfully!
+февр. 20, 2021 2:18:21 AM Blocks.WorkflowFileReader execute
+INFO: Executed successfully!
+февр. 20, 2021 2:18:21 AM Blocks.WorkflowLexicalSorter <clinit>
+INFO: Created successfully!
+февр. 20, 2021 2:18:21 AM Blocks.WorkflowLexicalSorter execute
+INFO: Executed successfully!
+февр. 20, 2021 2:18:21 AM Blocks.WorkflowReplacer <clinit>
+INFO: Created successfully!
+февр. 20, 2021 2:18:21 AM Blocks.WorkflowReplacer execute
+INFO: Executed successfully!
+февр. 20, 2021 2:18:21 AM Blocks.WorkflowDump <clinit>
+INFO: Created successfully!
+февр. 20, 2021 2:18:21 AM Blocks.WorkflowDump execute
+INFO: Executed successfully!
+февр. 20, 2021 2:18:21 AM Blocks.WorkflowGrep <clinit>
+INFO: Created successfully!
+февр. 20, 2021 2:18:21 AM Blocks.WorkflowGrep execute
+INFO: Executed successfully!
+февр. 20, 2021 2:18:21 AM Blocks.WorkflowFileWriter <clinit>
+INFO: Created successfully!
+февр. 20, 2021 2:18:21 AM Blocks.WorkflowFileWriter execute
+INFO: Executed successfully!
+февр. 20, 2021 2:18:21 AM SimpleTest test
+INFO: Test failed :(
