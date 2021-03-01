@@ -1,0 +1,5 @@
+desc
+1 = readfile words.txt
+2 = grep chebyrek
+csed
+1 -> 2
