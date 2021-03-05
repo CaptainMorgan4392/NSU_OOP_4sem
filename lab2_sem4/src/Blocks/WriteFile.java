@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.util.ArrayList;
 
+import static Blocks.Block.InOutParam.OUT;
+
 public class WriteFile implements Block {
     private static final Logger logger = LogManager.getLogger(WriteFile.class.getName());
     @Override
@@ -32,5 +34,10 @@ public class WriteFile implements Block {
         }
 
         logger.trace("Execution completed successfully!");
+    }
+
+    @Override
+    public InOutParam getParamOfBlock() {
+        return OUT;
     }
 }

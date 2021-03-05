@@ -15,6 +15,8 @@ import java.util.ArrayList;
 public class WorkflowExecutor {
     private static final Logger logger = LogManager.getLogger(WorkflowExecutor.class);
 
+    Block.InOutParam prevState = Block.InOutParam.DEFAULT;
+
     static class Pair <K extends String, V extends ArrayList<String>> {
         K command;
         V arguments;
@@ -96,6 +98,8 @@ public class WorkflowExecutor {
                 Block newBlock = BlockFactory.getInstance().getBlock(getCurrentKey());
                 logger.trace("Instance of " + newBlock.getClass().getSimpleName() + " has created.");
 
+                checkCurBlock(newBlock);
+
                 newBlock.execute(text, getCurrentArguments());
 
                 indexInSequence++;
@@ -117,6 +121,26 @@ public class WorkflowExecutor {
         } catch (Exception e) {
             logger.error("An error has occured during creating of block!");
             logger.error("Process will be terminated.");
+        }
+    }
+
+    private void checkCurBlock(Block b) throws WrongInputFormatException {
+        switch (b.getParamOfBlock()) {
+            case IN -> {
+                if (indexInSequence != 0 || prevState != Block.InOutParam.DEFAULT) {
+                    throw new WrongInputFormatException();
+                }
+            }
+            case OUT -> {
+                if (indexInSequence != workflowSequence.size() || prevState == Block.InOutParam.OUT) {
+                    throw new WrongInputFormatException();
+                }
+            }
+            case IN_OUT -> {
+                if (prevState == Block.InOutParam.OUT) {
+                    throw new WrongInputFormatException();
+                }
+            }
         }
     }
 }

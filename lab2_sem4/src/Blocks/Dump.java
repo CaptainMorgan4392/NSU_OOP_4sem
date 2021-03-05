@@ -1,33 +1,45 @@
 package Blocks;
 
 import Exceptions.WrongParamsQuantityException;
+import Executor.WorkflowExecutor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class Grep implements Block {
-    private static final Logger logger = LogManager.getLogger(Grep.class.getName());
+import static Blocks.Block.InOutParam.IN_OUT;
+
+public class Dump implements Block {
+    private static final Logger logger = LogManager.getLogger(Dump.class.getName());
+
     @Override
     public void execute(ArrayList<String> text, ArrayList<String> currentArguments) throws WrongParamsQuantityException, FileNotFoundException {
         logger.trace("Starting execution!");
+
         if (currentArguments.size() != 1) {
             throw new WrongParamsQuantityException();
         }
 
-        ArrayList <String> selected = new ArrayList<>();
-        String wordToFind = currentArguments.get(0);
+        String filename = currentArguments.get(0);
+        PrintWriter writer = new PrintWriter(
+                new OutputStreamWriter(
+                        new FileOutputStream(filename)));
 
         for (String line : text) {
-            if (line.contains(wordToFind)) {
-                selected.add(line);
-            }
+            writer.write(line + '\n');
         }
 
-        text.removeAll(text);
-        text.addAll(selected);
+        writer.close();
 
         logger.trace("Execution completed successfully!");
+    }
+
+    @Override
+    public InOutParam getParamOfBlock() {
+        return IN_OUT;
     }
 }

@@ -6,23 +6,31 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Comparator;
 
-public class Replace implements Block {
-    private static final Logger logger = LogManager.getLogger(Replace.class.getName());
+import static Blocks.Block.InOutParam.IN_OUT;
+
+public class Sort implements Block {
+    private static final Logger logger = LogManager.getLogger(Sort.class.getName());
     @Override
     public void execute(ArrayList<String> text, ArrayList<String> currentArguments) throws WrongParamsQuantityException, FileNotFoundException {
         logger.trace("Starting execution!");
-        if (currentArguments.size() != 2) {
+        if (currentArguments.size() != 0) {
             throw new WrongParamsQuantityException();
         }
 
-        String toRemove = "\\b" + currentArguments.get(0) + "\\b";
-        String toInsert = currentArguments.get(1);
-
-        for (int i = 0; i < text.size(); ++i) {
-            text.set(i, text.get(i).replaceAll(toRemove, toInsert));
-        }
+        text.sort(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareTo(o2);
+            }
+        });
 
         logger.trace("Execution completed successfully!");
+    }
+
+    @Override
+    public InOutParam getParamOfBlock() {
+        return IN_OUT;
     }
 }

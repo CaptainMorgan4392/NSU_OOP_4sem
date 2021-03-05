@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.util.ArrayList;
 
+import static Blocks.Block.InOutParam.IN;
+
 public class ReadFile implements Block {
     private static final Logger logger = LogManager.getLogger(ReadFile.class.getName());
     @Override
@@ -28,5 +30,10 @@ public class ReadFile implements Block {
         reader.close();
 
         logger.trace("Execution completed successfully!");
+    }
+
+    @Override
+    public InOutParam getParamOfBlock() {
+        return IN;
     }
 }
