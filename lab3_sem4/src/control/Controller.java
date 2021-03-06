@@ -22,14 +22,16 @@ public class Controller extends KeyAdapter {
     }
 
     public void createRequestByAction(Action action) {
-        switch (action) {
-            case MOVE_UP -> model.request(MoveDirection.UP);
+        if (model.getCurrentState() == Model.ModelState.CURRENTLY_PLAYING) {
+            switch (action) {
+                case MOVE_UP -> model.request(MoveDirection.UP);
 
-            case MOVE_DOWN -> model.request(MoveDirection.DOWN);
+                case MOVE_DOWN -> model.request(MoveDirection.DOWN);
 
-            case MOVE_LEFT -> model.request(MoveDirection.LEFT);
+                case MOVE_LEFT -> model.request(MoveDirection.LEFT);
 
-            case MOVE_RIGHT -> model.request(MoveDirection.RIGHT);
+                case MOVE_RIGHT -> model.request(MoveDirection.RIGHT);
+            }
         }
     }
 

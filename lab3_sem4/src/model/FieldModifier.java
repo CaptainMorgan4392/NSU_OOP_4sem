@@ -18,9 +18,7 @@ public class FieldModifier {
 
         int index = (int)(Math.random() * indices.size());
 
-        int row = index / 4;
-        int col = index % 4;
-        field[row][col] = BehaviourConstants.DEFAULT_VALUE;
+        field[indices.get(index) / 4][indices.get(index) % 4] = BehaviourConstants.DEFAULT_VALUE;
     }
 
     public static Integer[][] init() {
@@ -40,17 +38,15 @@ public class FieldModifier {
 
     private static ArrayList<Integer> collapse(ArrayList <Integer> numbersLine) {
         ArrayList <Integer> newLine = new ArrayList<>();
-        boolean prevCollapsed = false;
 
         for (int i = 0; i < BehaviourConstants.DIMENSION; ++i) {
             int currentInLine = numbersLine.get(i);
+
             if (currentInLine != BehaviourConstants.EMPTY) {
-                if (!newLine.isEmpty() && newLine.get(newLine.size() - 1) == currentInLine && !prevCollapsed) {
-                    newLine.set(newLine.size() - 1, 2 * newLine.get(newLine.size() - 1));
-                    prevCollapsed = true;
-                } else {
-                    newLine.add(currentInLine);
-                    prevCollapsed = false;
+                newLine.add(currentInLine);
+                if (newLine.size() > 1 && newLine.get(newLine.size() - 1).equals(newLine.get(newLine.size() - 2))) {
+                    newLine.set(newLine.size() - 2, 2 * newLine.get(newLine.size() - 2));
+                    newLine.remove(newLine.size() - 1);
                 }
             }
         }
@@ -59,6 +55,8 @@ public class FieldModifier {
     }
 
     public static void moveUp(Integer[][] field) {
+        boolean modified = false;
+
         for (int i = 0; i < BehaviourConstants.DIMENSION; i++) {
             ArrayList <Integer> numberLine = new ArrayList<>();
 
@@ -69,17 +67,27 @@ public class FieldModifier {
             numberLine = collapse(numberLine);
 
             for (int j = 0; j < numberLine.size(); j++) {
-                field[BehaviourConstants.DIMENSION - j - 1][i] = numberLine.get(j);
+                if (!field[BehaviourConstants.DIMENSION - j - 1][i].equals(numberLine.get(j))) {
+                    field[BehaviourConstants.DIMENSION - j - 1][i] = numberLine.get(j);
+                    modified = true;
+                }
             }
             for (int j = numberLine.size(); j < BehaviourConstants.DIMENSION; ++j) {
-                field[BehaviourConstants.DIMENSION - j - 1][i] = BehaviourConstants.EMPTY;
+                if (!field[BehaviourConstants.DIMENSION - j - 1][i].equals(BehaviourConstants.EMPTY)) {
+                    field[BehaviourConstants.DIMENSION - j - 1][i] = BehaviourConstants.EMPTY;
+                    modified = true;
+                }
             }
         }
 
-        insertInRandomEmptyCell(field);
+        if (modified) {
+            insertInRandomEmptyCell(field);
+        }
     }
 
     public static void moveDown(Integer[][] field) {
+        boolean modified = false;
+
         for (int i = 0; i < BehaviourConstants.DIMENSION; i++) {
             ArrayList <Integer> numberLine = new ArrayList<>();
 
@@ -90,17 +98,27 @@ public class FieldModifier {
             numberLine = collapse(numberLine);
 
             for (int j = 0; j < numberLine.size(); j++) {
-                field[j][i] = numberLine.get(j);
+                if (!field[j][i].equals(numberLine.get(j))) {
+                    field[j][i] = numberLine.get(j);
+                    modified = true;
+                }
             }
             for (int j = numberLine.size(); j < BehaviourConstants.DIMENSION; ++j) {
-                field[j][i] = BehaviourConstants.EMPTY;
+                if (!field[j][i].equals(BehaviourConstants.EMPTY)) {
+                    field[j][i] = BehaviourConstants.EMPTY;
+                    modified = true;
+                }
             }
         }
 
-        insertInRandomEmptyCell(field);
+        if (modified) {
+            insertInRandomEmptyCell(field);
+        }
     }
 
     public static void moveLeft(Integer[][] field) {
+        boolean modified = false;
+
         for (int i = 0; i < BehaviourConstants.DIMENSION; i++) {
             ArrayList <Integer> numberLine = new ArrayList<>();
 
@@ -111,17 +129,27 @@ public class FieldModifier {
             numberLine = collapse(numberLine);
 
             for (int j = 0; j < numberLine.size(); j++) {
-                field[i][j] = numberLine.get(j);
+                if (!field[i][j].equals(numberLine.get(j))) {
+                    field[i][j] = numberLine.get(j);
+                    modified = true;
+                }
             }
             for (int j = numberLine.size(); j < BehaviourConstants.DIMENSION; ++j) {
-                field[i][j] = BehaviourConstants.EMPTY;
+                if (!field[i][j].equals(BehaviourConstants.EMPTY)) {
+                    field[i][j] = BehaviourConstants.EMPTY;
+                    modified = true;
+                }
             }
         }
 
-        insertInRandomEmptyCell(field);
+        if (modified) {
+            insertInRandomEmptyCell(field);
+        }
     }
 
     public static void moveRight(Integer[][] field) {
+        boolean modified = false;
+
         for (int i = 0; i < BehaviourConstants.DIMENSION; i++) {
             ArrayList <Integer> numberLine = new ArrayList<>();
 
@@ -132,13 +160,21 @@ public class FieldModifier {
             numberLine = collapse(numberLine);
 
             for (int j = 0; j < numberLine.size(); j++) {
-                field[i][BehaviourConstants.DIMENSION - j - 1] = numberLine.get(j);
+                if (!field[i][BehaviourConstants.DIMENSION - j - 1].equals(numberLine.get(j))) {
+                    field[i][BehaviourConstants.DIMENSION - j - 1] = numberLine.get(j);
+                    modified = true;
+                }
             }
             for (int j = numberLine.size(); j < BehaviourConstants.DIMENSION; ++j) {
-                field[i][BehaviourConstants.DIMENSION - j - 1] = BehaviourConstants.EMPTY;
+                if (!field[i][BehaviourConstants.DIMENSION - j - 1].equals(BehaviourConstants.EMPTY)) {
+                    field[i][BehaviourConstants.DIMENSION - j - 1] = BehaviourConstants.EMPTY;
+                    modified = true;
+                }
             }
         }
 
-        insertInRandomEmptyCell(field);
+        if (modified) {
+            insertInRandomEmptyCell(field);
+        }
     }
 }
