@@ -2,6 +2,7 @@ package control;
 
 import model.Model;
 import model.MoveDirection;
+import model.BehaviourConstants;
 import render.Renderer;
 
 import java.awt.event.KeyAdapter;
@@ -42,18 +43,13 @@ public class Controller extends KeyAdapter {
     @Override
     public synchronized void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case 37:
-                this.createRequestByAction(Action.MOVE_LEFT);
-                break;
-            case 38:
-                this.createRequestByAction(Action.MOVE_DOWN);
-                break;
-            case 39:
-                this.createRequestByAction(Action.MOVE_RIGHT);
-                break;
-            case 40:
-                this.createRequestByAction(Action.MOVE_UP);
-                break;
+            case BehaviourConstants.ARROW_LEFT -> this.createRequestByAction(Action.MOVE_LEFT);
+
+            case BehaviourConstants.ARROW_UP -> this.createRequestByAction(Action.MOVE_DOWN);
+
+            case BehaviourConstants.ARROW_RIGHT -> this.createRequestByAction(Action.MOVE_RIGHT);
+
+            case BehaviourConstants.ARROW_DOWN -> this.createRequestByAction(Action.MOVE_UP);
         }
     }
 
