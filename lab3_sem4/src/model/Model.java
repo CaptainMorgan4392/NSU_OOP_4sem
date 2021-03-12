@@ -13,12 +13,12 @@ public class Model implements Observable {
         WIN
     }
 
-    Integer[][] field;
+    Field field;
     List <Observer> observers;
     ModelState currentState;
 
     public Model() {
-        field = FieldModifier.init();
+        field = new Field().init();
         observers = new LinkedList<>();
         this.setCurrentState(ModelState.CURRENTLY_PLAYING);
     }
@@ -45,7 +45,7 @@ public class Model implements Observable {
     }
 
     public Integer[][] getField() {
-        return field;
+        return field.getTwoDimensionalArray();
     }
 
     public void request(MoveDirection dir) {

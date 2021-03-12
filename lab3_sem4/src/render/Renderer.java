@@ -36,6 +36,7 @@ public class Renderer extends Component implements Observer {
                 Integer current = model.getField()[i][j];
                 if (current == BehaviourConstants.EMPTY) {
                     cells[i][j] = new JLabel(" ");
+                    cells[i][j].setBackground(Color.WHITE);
                 } else {
                     cells[i][j] = new JLabel(current.toString());
                     cells[i][j].setBackground(Color.YELLOW);
@@ -46,6 +47,7 @@ public class Renderer extends Component implements Observer {
                 cells[i][j].setPreferredSize(cellSize);
                 cells[i][j].setVerticalAlignment(SwingConstants.CENTER);
                 cells[i][j].setHorizontalAlignment(SwingConstants.CENTER);
+
                 gameBoard.add(cells[i][j]);
             }
         }
@@ -57,17 +59,14 @@ public class Renderer extends Component implements Observer {
 
     @Override
     public void handleEvent() {
-        gameBoard = new JPanel();
-
-        gameBoard.setLayout(new GridLayout(4, 4));
-
         for (int i = 0; i < BehaviourConstants.DIMENSION; ++i) {
             for (int j = 0; j < BehaviourConstants.DIMENSION; ++j) {
                 Integer current = model.getField()[i][j];
                 if (current == BehaviourConstants.EMPTY) {
-                    cells[i][j] = new JLabel(" ");
+                    cells[i][j].setText(" ");
+                    cells[i][j].setBackground(Color.WHITE);
                 } else {
-                    cells[i][j] = new JLabel(current.toString());
+                    cells[i][j].setText(current.toString());
                     cells[i][j].setBackground(
                             switch (current) {
                                 case 2 -> Color.YELLOW;
@@ -91,13 +90,11 @@ public class Renderer extends Component implements Observer {
                 cells[i][j].setPreferredSize(cellSize);
                 cells[i][j].setVerticalAlignment(SwingConstants.CENTER);
                 cells[i][j].setHorizontalAlignment(SwingConstants.CENTER);
-                gameBoard.add(cells[i][j]);
             }
         }
 
-        mainFrame.pack();
-        mainFrame.getContentPane().add(gameBoard);
-        mainFrame.setVisible(true);
+        mainFrame.revalidate();
+        mainFrame.repaint();
 
         if (model.getCurrentState() == WIN) {
             JOptionPane.showMessageDialog(null, "Congratulations! You win!");
