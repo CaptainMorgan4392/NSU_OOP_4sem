@@ -16,11 +16,25 @@ public class Model implements Observable {
     Field field;
     List <Observer> observers;
     ModelState currentState;
+    Score scores;
 
     public Model() {
         field = new Field().init();
         observers = new LinkedList<>();
         this.setCurrentState(ModelState.CURRENTLY_PLAYING);
+        this.scores = new Score(10);
+    }
+
+    public Score getScores() {
+        return scores;
+    }
+
+    public void setScores(Score scores) {
+        this.scores = scores;
+
+        isGameEnded();
+
+        notifyObservers();
     }
 
     public ModelState getCurrentState() {
@@ -50,13 +64,13 @@ public class Model implements Observable {
 
     public void request(MoveDirection dir) {
         switch (dir) {
-            case UP -> FieldModifier.moveUp(this.field);
+            case UP -> FieldModifier.moveUp(this.field, scores);
 
-            case DOWN -> FieldModifier.moveDown(this.field);
+            case DOWN -> FieldModifier.moveDown(this.field, scores);
 
-            case LEFT -> FieldModifier.moveLeft(this.field);
+            case LEFT -> FieldModifier.moveLeft(this.field, scores);
 
-            case RIGHT -> FieldModifier.moveRight(this.field);
+            case RIGHT -> FieldModifier.moveRight(this.field, scores);
         }
 
         isGameEnded();
@@ -67,7 +81,7 @@ public class Model implements Observable {
     public void isGameEnded() {
         if (FieldChecker.checkWin(this.getField())) {
             this.setCurrentState(ModelState.WIN);
-        } else if (FieldChecker.checkLose(this.getField())) {
+        } else if (FieldChecker.checkLose(this.getField()) || this.getScores().getScore() == -1) {
             this.setCurrentState(ModelState.GAME_OVER);
         }
     }

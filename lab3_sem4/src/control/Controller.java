@@ -3,26 +3,32 @@ package control;
 import model.Model;
 import model.MoveDirection;
 import model.BehaviourConstants;
+import model.Score;
 import render.Renderer;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
-public class Controller extends KeyAdapter {
+public class Controller extends KeyAdapter implements ActionListener {
     Model model;
     Renderer renderer;
+
 
     public Controller() {
         model = new Model();
         renderer = new Renderer(model);
 
         renderer.getFrame().addKeyListener(this);
+        renderer.getClock().addActionListener(this);
+        renderer.getClock().start();
 
         model.addObserver(renderer);
     }
 
-    public void createRequestByAction(Action action) {
+    public synchronized void createRequestByAction(Action action) {
         if (model.getCurrentState() == Model.ModelState.CURRENTLY_PLAYING) {
             switch (action) {
                 case MOVE_UP -> model.request(MoveDirection.UP);
@@ -32,8 +38,12 @@ public class Controller extends KeyAdapter {
                 case MOVE_LEFT -> model.request(MoveDirection.LEFT);
 
                 case MOVE_RIGHT -> model.request(MoveDirection.RIGHT);
+
+                case GET_ONE_POINT_OUT -> model.setScores(new Score(model.getScores().getScore() - 1));
             }
         }
+
+
     }
 
     @Override
@@ -53,7 +63,14 @@ public class Controller extends KeyAdapter {
         }
     }
 
+
+
     @Override
     public synchronized void keyReleased(KeyEvent e) {
+    }
+
+    @Override
+    public synchronized void actionPerformed(ActionEvent e) {
+        this.createRequestByAction(Action.GET_ONE_POINT_OUT);
     }
 }

@@ -15,8 +15,12 @@ public class Renderer extends Component implements Observer {
     Model model;
     JLabel[][] cells = new JLabel[BehaviourConstants.DIMENSION][BehaviourConstants.DIMENSION];
     static JFrame mainFrame;
+    JPanel scoresBoard;
+    JLabel scores;
     JPanel gameBoard;
     Border solidBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
+
+    Timer clock;
 
     Dimension cellSize = new Dimension(BehaviourConstants.CELL_PIXEL_SIZE, BehaviourConstants.CELL_PIXEL_SIZE);
 
@@ -24,12 +28,21 @@ public class Renderer extends Component implements Observer {
         this.model = model;
 
         mainFrame = new JFrame("2048");
-        mainFrame.setPreferredSize(new Dimension(BehaviourConstants.DIMENSION * BehaviourConstants.CELL_PIXEL_SIZE,
-                                                BehaviourConstants.DIMENSION * BehaviourConstants.CELL_PIXEL_SIZE));
+        mainFrame.setPreferredSize(new Dimension(
+           BehaviourConstants.DIMENSION * BehaviourConstants.CELL_PIXEL_SIZE,
+        BehaviourConstants.DIMENSION * BehaviourConstants.CELL_PIXEL_SIZE + 2 * BehaviourConstants.CELL_PIXEL_SIZE));
+        mainFrame.setLayout(new FlowLayout());
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        scoresBoard = new JPanel();
+        scores = new JLabel("Scores: " + this.model.getScores().getScore());
+        scores.setPreferredSize(new Dimension(BehaviourConstants.DIMENSION * BehaviourConstants.CELL_PIXEL_SIZE,
+                BehaviourConstants.CELL_PIXEL_SIZE));
+        scores.setHorizontalAlignment(SwingConstants.CENTER);
+        scoresBoard.add(scores);
+
         gameBoard = new JPanel();
-        gameBoard.setLayout(new GridLayout(4, 4));
+        gameBoard.setLayout(new GridLayout(BehaviourConstants.DIMENSION, BehaviourConstants.DIMENSION));
 
         for (int i = 0; i < BehaviourConstants.DIMENSION; ++i) {
             for (int j = 0; j < BehaviourConstants.DIMENSION; ++j) {
@@ -53,12 +66,17 @@ public class Renderer extends Component implements Observer {
         }
 
         mainFrame.pack();
+        mainFrame.getContentPane().add(scoresBoard);
         mainFrame.getContentPane().add(gameBoard);
         mainFrame.setVisible(true);
+
+        clock = new Timer(1000, null);
     }
 
     @Override
     public void handleEvent() {
+        scores.setText("Scores: " + this.model.getScores().getScore());
+
         for (int i = 0; i < BehaviourConstants.DIMENSION; ++i) {
             for (int j = 0; j < BehaviourConstants.DIMENSION; ++j) {
                 Integer current = model.getField()[i][j];
@@ -82,6 +100,8 @@ public class Renderer extends Component implements Observer {
                             });
                     if (current >= 128 || current == 32) {
                         cells[i][j].setForeground(Color.WHITE);
+                    } else {
+                        cells[i][j].setForeground(Color.BLACK);
                     }
 
                     cells[i][j].setOpaque(true);
@@ -105,5 +125,9 @@ public class Renderer extends Component implements Observer {
 
     public Component getFrame() {
         return mainFrame;
+    }
+
+    public Timer getClock() {
+        return clock;
     }
 }

@@ -4,6 +4,7 @@ public enum Action {
     MOVE_UP,
     MOVE_DOWN,
     MOVE_LEFT,
-    MOVE_RIGHT
+    MOVE_RIGHT,
+    GET_ONE_POINT_OUT
 }
 

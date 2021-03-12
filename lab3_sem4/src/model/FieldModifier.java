@@ -21,7 +21,7 @@ public class FieldModifier {
         field[indices.get(index) / 4][indices.get(index) % 4] = BehaviourConstants.DEFAULT_VALUE;
     }
 
-    private static ArrayList<Integer> collapse(ArrayList <Integer> numbersLine) {
+    private static ArrayList<Integer> collapse(ArrayList <Integer> numbersLine, Score scores) {
         ArrayList <Integer> newLine = new ArrayList<>();
 
         for (int i = 0; i < BehaviourConstants.DIMENSION; ++i) {
@@ -31,6 +31,7 @@ public class FieldModifier {
                 newLine.add(currentInLine);
                 if (newLine.size() > 1 && newLine.get(newLine.size() - 1).equals(newLine.get(newLine.size() - 2))) {
                     newLine.set(newLine.size() - 2, 2 * newLine.get(newLine.size() - 2));
+                    scores.setScore(scores.getScore() + newLine.get(newLine.size() - 2));
                     newLine.remove(newLine.size() - 1);
                 }
             }
@@ -39,7 +40,7 @@ public class FieldModifier {
         return newLine;
     }
 
-    public static void moveUp(Field field) {
+    public static void moveUp(Field field, Score scores) {
         boolean modified = false;
 
         for (int i = 0; i < BehaviourConstants.DIMENSION; i++) {
@@ -49,7 +50,7 @@ public class FieldModifier {
                 numberLine.add(field.getByIndices(BehaviourConstants.DIMENSION - j - 1, i));
             }
 
-            numberLine = collapse(numberLine);
+            numberLine = collapse(numberLine, scores);
 
             for (int j = 0; j < numberLine.size(); j++) {
                 if (!field.getByIndices(BehaviourConstants.DIMENSION - j - 1, i).equals(numberLine.get(j))) {
@@ -70,7 +71,7 @@ public class FieldModifier {
         }
     }
 
-    public static void moveDown(Field field) {
+    public static void moveDown(Field field, Score scores) {
         boolean modified = false;
 
         for (int i = 0; i < BehaviourConstants.DIMENSION; i++) {
@@ -80,7 +81,7 @@ public class FieldModifier {
                 numberLine.add(field.getByIndices(j, i));
             }
 
-            numberLine = collapse(numberLine);
+            numberLine = collapse(numberLine, scores);
 
             for (int j = 0; j < numberLine.size(); j++) {
                 if (!field.getByIndices(j, i).equals(numberLine.get(j))) {
@@ -101,7 +102,7 @@ public class FieldModifier {
         }
     }
 
-    public static void moveLeft(Field field) {
+    public static void moveLeft(Field field, Score scores) {
         boolean modified = false;
 
         for (int i = 0; i < BehaviourConstants.DIMENSION; i++) {
@@ -111,7 +112,7 @@ public class FieldModifier {
                 numberLine.add(field.getByIndices(i, j));
             }
 
-            numberLine = collapse(numberLine);
+            numberLine = collapse(numberLine, scores);
 
             for (int j = 0; j < numberLine.size(); j++) {
                 if (!field.getByIndices(i, j).equals(numberLine.get(j))) {
@@ -132,7 +133,7 @@ public class FieldModifier {
         }
     }
 
-    public static void moveRight(Field field) {
+    public static void moveRight(Field field, Score scores) {
         boolean modified = false;
 
         for (int i = 0; i < BehaviourConstants.DIMENSION; i++) {
@@ -142,7 +143,7 @@ public class FieldModifier {
                 numberLine.add(field.getByIndices(i, BehaviourConstants.DIMENSION - j - 1));
             }
 
-            numberLine = collapse(numberLine);
+            numberLine = collapse(numberLine, scores);
 
             for (int j = 0; j < numberLine.size(); j++) {
                 if (!field.getByIndices(i, BehaviourConstants.DIMENSION - j - 1).equals(numberLine.get(j))) {
