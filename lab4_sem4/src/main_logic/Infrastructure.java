@@ -26,7 +26,7 @@ public class Infrastructure {
 
     static {
         try {
-            InputStream inputStream = Infrastructure.class.getResourceAsStream("manufacture.config");
+            InputStream inputStream = Infrastructure.class.getResourceAsStream("/manufacture.config");
             properties.load(inputStream);
         } catch (IOException e) {
             throw new ExceptionInInitializerError(e);

@@ -1,5 +1,4 @@
 import main_logic.Infrastructure;
-import org.apache.logging.log4j.*;
 
 public class Main {
 
