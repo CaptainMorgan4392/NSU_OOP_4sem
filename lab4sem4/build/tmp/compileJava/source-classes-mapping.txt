@@ -1,0 +1,5 @@
+product/ProductType.java
+ product.ProductType
+product/Product.java
+ product.Product
+ product.Product$IDGenerator
