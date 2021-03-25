@@ -40,7 +40,7 @@ public class Train implements Transport {
                 .split(", ");
 
         int requiredNumberOfElements = Integer.parseInt(
-                Infrastructure.getProperties().get("train_numberOfTrains").toString()
+                Infrastructure.getProperties().get("train_number").toString()
         );
 
         if (requiredNumberOfElements != quantities.length || requiredNumberOfElements != productTypes.length) {
@@ -116,8 +116,6 @@ public class Train implements Transport {
         }
 
         this.getDeliveryService().getForwardPaths().add(path);
-
-        //add to warehouses
     }
 
     @Override

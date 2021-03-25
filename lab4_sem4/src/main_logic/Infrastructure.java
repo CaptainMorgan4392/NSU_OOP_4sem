@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Infrastructure {
-    private static final Properties properties = new Properties();
+    private static final Properties properties = new Properties();;
 
     private static final ArrayList <Factory> factories;
     private static final DeliveryService deliveryService;
@@ -26,7 +26,7 @@ public class Infrastructure {
 
     static {
         try {
-            InputStream inputStream = Infrastructure.class.getResourceAsStream("/manufacture.config");
+            InputStream inputStream = Infrastructure.class.getResourceAsStream("manufacture.config");
             properties.load(inputStream);
         } catch (IOException e) {
             throw new ExceptionInInitializerError(e);

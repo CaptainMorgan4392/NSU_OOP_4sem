@@ -19,4 +19,8 @@ public class Product {
         this.uniqueID = IDGenerator.getNewID();
         this.productType = productType;
     }
+
+    public int getUniqueID() {
+        return uniqueID;
+    }
 }
