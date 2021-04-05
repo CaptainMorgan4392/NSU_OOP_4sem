@@ -32,6 +32,7 @@ delivery/transport/Train.java
  delivery.transport.Train
 delivery/station/DepartureStation.java
  delivery.station.DepartureStation
+ delivery.station.DepartureStation$CreationRunnable
 producer/Factory.java
  producer.Factory
 delivery/service/DeliveryService.java
