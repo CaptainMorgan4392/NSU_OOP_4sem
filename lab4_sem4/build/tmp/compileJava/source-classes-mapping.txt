@@ -1,0 +1,44 @@
+delivery/path/BackwardPath.java
+ delivery.path.BackwardPath
+production/ProductType.java
+ production.ProductType
+production/ProductUnificator.java
+ production.ProductUnificator
+consumer/Consumer.java
+ consumer.Consumer
+production/Product.java
+ production.Product
+main/ConfigFormatException.java
+ main.ConfigFormatException
+producer/Producer.java
+ producer.Producer
+main/Main.java
+ main.Main
+delivery/path/Path.java
+ delivery.path.Path
+delivery/station/TrainCreator.java
+ delivery.station.TrainCreator
+delivery/path/ForwardPath.java
+ delivery.path.ForwardPath
+main/Infrastructure.java
+ main.Infrastructure
+warehouse/ArrivalWarehouse.java
+ warehouse.ArrivalWarehouse
+warehouse/Warehouse.java
+ warehouse.Warehouse
+delivery/station/Station.java
+ delivery.station.Station
+delivery/transport/Train.java
+ delivery.transport.Train
+delivery/station/DepartureStation.java
+ delivery.station.DepartureStation
+producer/Factory.java
+ producer.Factory
+delivery/service/DeliveryService.java
+ delivery.service.DeliveryService
+consumer/ConcreteConsumer.java
+ consumer.ConcreteConsumer
+delivery/station/ArrivalStation.java
+ delivery.station.ArrivalStation
+warehouse/DepartureWarehouse.java
+ warehouse.DepartureWarehouse
