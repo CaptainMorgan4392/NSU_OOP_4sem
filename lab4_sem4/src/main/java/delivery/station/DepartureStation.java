@@ -89,5 +89,9 @@ public class DepartureStation extends Station implements TrainCreator {
         for (Train train : trains) {
             train.stop();
         }
+
+        for (Train train : nowGoing) {
+            train.stop();
+        }
     }
 }

@@ -11,12 +11,14 @@ public abstract class Station {
     protected static final Logger logger = LogManager.getLogger(DepartureStation.class);
 
     protected final ArrayList<Train> trains;
+    protected final ArrayList<Train> nowGoing;
 
     protected int capacity;
     protected DeliveryService deliveryService;
 
     protected Station(DeliveryService deliveryService) {
         this.trains = new ArrayList<>();
+        this.nowGoing = new ArrayList<>();
         this.deliveryService = deliveryService;
     }
 
@@ -30,6 +32,7 @@ public abstract class Station {
         }
 
         this.getTrains().add(train);
+        this.nowGoing.remove(train);
 
         logger.trace("Train of contract: " + train.getProductType() + " - " + train.getToDeliver()
                 + " put to " + this.getClass());
@@ -43,6 +46,7 @@ public abstract class Station {
         }
 
         this.getTrains().remove(train);
+        this.nowGoing.add(train);
 
         logger.trace("Train of contract: " + train.getProductType() + " - " + train.getToDeliver()
                 + " extracted from " + this.getClass());

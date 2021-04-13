@@ -28,11 +28,11 @@ warehouse/Warehouse.java
  warehouse.Warehouse
 consumer/ConcreteConsumer.java
  consumer.ConcreteConsumer
+main/Main.java
+ main.Main
 main/Infrastructure.java
  main.Infrastructure
  main.Infrastructure$ConfigParser
-main/Main.java
- main.Main
 delivery/station/Station.java
  delivery.station.Station
 delivery/transport/Train.java
