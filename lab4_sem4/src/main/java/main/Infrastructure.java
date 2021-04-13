@@ -70,7 +70,7 @@ public class Infrastructure {
             }
         }
 
-        private void initStartingTrains() throws ConfigFormatException {
+        private void initStartingTrains() throws ConfigFormatException, InterruptedException {
             int numberOfTrains = Integer.parseInt(getProperties().get("train_numberOfTrains").toString());
             String[] types = getProperties().get("train_typesOfTrains").toString().split(", ");
             String[] contracts = getProperties().get("train_contracts").toString().split(", ");
@@ -81,7 +81,7 @@ public class Infrastructure {
 
             int amortisation = Integer.parseInt(getProperties().get("train_amortisation").toString());
             for (int i = 0; i < numberOfTrains; ++i) {
-                delivery.getDepartureStation().getTrains().add(
+                delivery.getDepartureStation().putTrainInto(
                         new Train(getDeliveryService(), new ProductType(types[i]),
                                 amortisation, Integer.parseInt(contracts[i])));
             }
@@ -127,7 +127,7 @@ public class Infrastructure {
         parser.initConsumers();
     }
 
-    public void start() throws ConfigFormatException {
+    public void start() throws ConfigFormatException, InterruptedException {
         delivery = new DeliveryService(this);
         parser.initStartingTrains();
 

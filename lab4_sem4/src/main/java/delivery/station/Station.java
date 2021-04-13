@@ -22,16 +22,12 @@ public abstract class Station {
         this.deliveryService = deliveryService;
     }
 
-    public ArrayList <Train> getTrains() {
-        return trains;
-    }
-
     public synchronized void putTrainInto(Train train) throws InterruptedException {
-        while (this.getTrains().size() == this.capacity) {
+        while (this.trains.size() == this.capacity) {
             wait();
         }
 
-        this.getTrains().add(train);
+        this.trains.add(train);
         this.nowGoing.remove(train);
 
         logger.trace("Train of contract: " + train.getProductType() + " - " + train.getToDeliver()
@@ -41,11 +37,11 @@ public abstract class Station {
     }
 
     public synchronized void getTrainFrom(Train train) throws InterruptedException {
-        while (!this.getTrains().contains(train)) {
+        while (!this.trains.contains(train)) {
             wait();
         }
 
-        this.getTrains().remove(train);
+        this.trains.remove(train);
         this.nowGoing.add(train);
 
         logger.trace("Train of contract: " + train.getProductType() + " - " + train.getToDeliver()
