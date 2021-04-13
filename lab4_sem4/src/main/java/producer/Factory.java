@@ -24,12 +24,14 @@ public class Factory extends Thread implements Producer {
         while (!this.isInterrupted()) {
             Product created = this.create();
 
-            logger.trace(created.toString() + "created.");
+            if (created != null) {
+                logger.trace(created.toString() + "created.");
 
-            try {
-                this.warehouse.put(created);
-            } catch (InterruptedException e) {
-                break;
+                try {
+                    this.warehouse.put(created);
+                } catch (InterruptedException e) {
+                    break;
+                }
             }
         }
     }

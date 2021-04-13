@@ -4,57 +4,71 @@ import delivery.path.BackwardPath;
 import delivery.path.ForwardPath;
 import delivery.station.ArrivalStation;
 import delivery.station.DepartureStation;
-import delivery.transport.Train;
 import main.ConfigFormatException;
 import main.Infrastructure;
 
 import java.util.PriorityQueue;
 
 public class DeliveryService {
+    private class DeliveryParametersParser {
+        public void initForwardPaths() {
+            String[] lengthsOfForwards = infrastructure.getProperties().get("path_forwardPaths")
+                    .toString().split(", ");
+
+            for (String lengthsOfForward : lengthsOfForwards) {
+                forwardPaths.add(new ForwardPath(Integer.parseInt(lengthsOfForward)));
+            }
+        }
+
+        public void initBackwardPaths() {
+            String[] lengthsOfBackwards = infrastructure.getProperties().get("path_backwardPaths")
+                    .toString().split(", ");
+
+            for (String lengthsOfBackward : lengthsOfBackwards) {
+                backwardPaths.add(new BackwardPath(Integer.parseInt(lengthsOfBackward)));
+            }
+        }
+
+        public void detectMaxPaths() {
+            maxBackward = -1;
+            maxForward = -1;
+
+            for (ForwardPath path : forwardPaths) {
+                if (path.getLength() > maxForward) {
+                    maxForward = path.getLength();
+                }
+            }
+
+            for (BackwardPath path : backwardPaths) {
+                maxBackward = path.getLength();
+            }
+        }
+    }
+
+    private final Infrastructure infrastructure;
+
     private volatile PriorityQueue <ForwardPath> forwardPaths = new PriorityQueue<>();
     private volatile PriorityQueue <BackwardPath> backwardPaths = new PriorityQueue<>();
 
-    private final ArrivalStation arrivalStation = new ArrivalStation();
+    private final ArrivalStation arrivalStation;
     private final DepartureStation departureStation;
 
     private int maxForward;
     private int maxBackward;
 
-    public DeliveryService() throws ConfigFormatException {
-        departureStation = new DepartureStation();
+    public DeliveryService(Infrastructure infrastructure) throws ConfigFormatException {
+        this.infrastructure = infrastructure;
+        arrivalStation = new ArrivalStation(this);
+        departureStation = new DepartureStation(this);
 
-        String[] lengthsOfForwards = Infrastructure.getProperties().get("path_forwardPaths")
-                .toString().split(", ");
-
-        for (String lengthsOfForward : lengthsOfForwards) {
-            forwardPaths.add(new ForwardPath(Integer.parseInt(lengthsOfForward)));
-        }
-
-        String[] lengthsOfBackwards = Infrastructure.getProperties().get("path_backwardPaths")
-                .toString().split(", ");
-
-        for (String lengthsOfBackward : lengthsOfBackwards) {
-            backwardPaths.add(new BackwardPath(Integer.parseInt(lengthsOfBackward)));
-        }
-
-        this.maxBackward = -1;
-        this.maxForward = -1;
-
-        for (ForwardPath path : forwardPaths) {
-            if (path.getLength() > maxForward) {
-                this.maxForward = path.getLength();
-            }
-        }
-
-        for (BackwardPath path : backwardPaths) {
-            this.maxBackward = path.getLength();
-        }
+        DeliveryParametersParser parser = new DeliveryParametersParser();
+        parser.initForwardPaths();
+        parser.initBackwardPaths();
+        parser.detectMaxPaths();
     }
 
     public void start() {
-        for (Train train : this.getDepartureStation().getTrains()) {
-            new Thread(train).start();
-        }
+        departureStation.launchTrains();
     }
 
     public PriorityQueue <ForwardPath> getForwardPaths() {
@@ -107,5 +121,9 @@ public class DeliveryService {
 
     public int getMaxBackward() {
         return maxBackward;
+    }
+
+    public Infrastructure getInfrastructure() {
+        return infrastructure;
     }
 }

@@ -1,27 +1,23 @@
 package delivery.station;
 
+import delivery.service.DeliveryService;
 import delivery.transport.Train;
-import main.ConfigFormatException;
-import main.Infrastructure;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
 public abstract class Station {
+    protected static final Logger logger = LogManager.getLogger(DepartureStation.class);
+
     protected final ArrayList<Train> trains;
 
     protected int capacity;
+    protected DeliveryService deliveryService;
 
-    protected Station() throws ConfigFormatException {
+    protected Station(DeliveryService deliveryService) {
         this.trains = new ArrayList<>();
-        if (this instanceof ArrivalStation) {
-            this.capacity = Integer.parseInt(
-                    Infrastructure.getProperties().get("depot_arrivalCapacity").toString()
-            );
-        } else {
-            this.capacity = Integer.parseInt(
-                    Infrastructure.getProperties().get("depot_departureCapacity").toString()
-            );
-        }
+        this.deliveryService = deliveryService;
     }
 
     public ArrayList <Train> getTrains() {
@@ -34,6 +30,10 @@ public abstract class Station {
         }
 
         this.getTrains().add(train);
+
+        logger.trace("Train of contract: " + train.getProductType() + " - " + train.getToDeliver()
+                + " put to " + this.getClass());
+
         notifyAll();
     }
 
@@ -43,6 +43,10 @@ public abstract class Station {
         }
 
         this.getTrains().remove(train);
+
+        logger.trace("Train of contract: " + train.getProductType() + " - " + train.getToDeliver()
+                + " extracted from " + this.getClass());
+
         notifyAll();
     }
 }

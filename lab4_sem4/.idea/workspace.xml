@@ -62,13 +62,17 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Color Scheme Font" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
@@ -143,25 +147,20 @@
       <workItem from="1617561283928" duration="1311000" />
       <workItem from="1617562929564" duration="16426000" />
       <workItem from="1617594825201" duration="743000" />
-      <workItem from="1617598104212" duration="2496000" />
+      <workItem from="1617598104212" duration="2758000" />
+      <workItem from="1617603238650" duration="158000" />
+      <workItem from="1617772580262" duration="240000" />
+      <workItem from="1617885137538" duration="2903000" />
+      <workItem from="1618038191216" duration="20000" />
+      <workItem from="1618038230005" duration="1764000" />
+      <workItem from="1618159924703" duration="8000" />
+      <workItem from="1618161321589" duration="3072000" />
+      <workItem from="1618245623289" duration="8582000" />
+      <workItem from="1618283755261" duration="1631000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/delivery/transport/Train.java</url>
-          <line>50</line>
-          <properties class="delivery.transport.Train" method="run">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

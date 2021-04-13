@@ -13,8 +13,8 @@
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
 
-        <RollingFile name="errorLog" fileName="${APP_LOG_ROOT}/error.log"
-                     filePattern="${APP_LOG_ROOT}/error-%d{yyyy-MM-dd}-%i.log" >
+        <RollingFile name="factoryLog" fileName="${APP_LOG_ROOT}/factory.log"
+                     filePattern="${APP_LOG_ROOT}/factory.log" >
             <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
@@ -23,8 +23,8 @@
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
 
-        <RollingFile name="traceLog" fileName="${APP_LOG_ROOT}/trace.log"
-                     filePattern="${APP_LOG_ROOT}/trace-%d{yyyy-MM-dd}-%i.log" >
+        <RollingFile name="consumerLog" fileName="${APP_LOG_ROOT}/consumer.log"
+                     filePattern="${APP_LOG_ROOT}/consumer.log" >
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
                 <SizeBasedTriggeringPolicy size="19500KB" />
@@ -43,11 +43,7 @@
             <AppenderRef ref="Console"  />
         </Logger>
 
-        <Logger name="warehouse.ArrivalWarehouse" additivity="false" level="trace">
-            <AppenderRef ref="Console"  />
-        </Logger>
-
-        <Logger name="warehouse.DepartureWarehouse" additivity="false" level="trace">
+        <Logger name="warehouse.Warehouse" additivity="false" level="trace">
             <AppenderRef ref="Console"  />
         </Logger>
 
@@ -56,6 +52,14 @@
         </Logger>
 
         <Logger name="consumer.ConcreteConsumer" additivity="false" level="trace">
+            <AppenderRef ref="Console"  />
+        </Logger>
+
+        <Logger name="delivery.station.Station" additivity="false" level="trace">
+            <AppenderRef ref="Console"  />
+        </Logger>
+
+        <Logger name="delivery.station.DepartureStation" additivity="false" level="trace">
             <AppenderRef ref="Console"  />
         </Logger>
 

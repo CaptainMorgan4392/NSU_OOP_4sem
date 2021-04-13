@@ -4,6 +4,7 @@ import delivery.path.BackwardPath;
 import delivery.path.ForwardPath;
 import delivery.path.Path;
 import delivery.service.DeliveryService;
+import delivery.station.Station;
 import main.Infrastructure;
 import production.Product;
 import production.ProductType;
@@ -16,7 +17,6 @@ import org.apache.logging.log4j.*;
 public class Train extends Thread {
     private static final Logger logger = LogManager.getLogger(Train.class);
 
-    private final int amortisation;
     private int remaining;
 
     private final ProductType productType;
@@ -31,99 +31,79 @@ public class Train extends Thread {
 
     private Path busyPath;
 
-    public Train(ProductType productType, int amortisation, int toDeliver) {
+    public Train(DeliveryService deliveryService, ProductType productType, int amortisation, int toDeliver) {
         this.productType = productType;
         this.toDeliver = toDeliver;
 
-        this.amortisation = amortisation;
-        this.remaining = this.amortisation;
+        this.remaining = amortisation;
 
-        this.from = Infrastructure.getDepartures().get(this.getProductType());
-        this.to = Infrastructure.getArrivals().get(this.getProductType());
+        this.deliveryService = deliveryService;
+
+        this.from = getDeliveryService().getInfrastructure().getDepartures().get(this.getProductType());
+        this.to = getDeliveryService().getInfrastructure().getArrivals().get(this.getProductType());
 
         this.storage = new ArrayDeque<>();
         this.busyPath = null;
+    }
 
-        this.deliveryService = Infrastructure.getDeliveryService();
+    private void fillTrain() throws InterruptedException {
+        for (int i = 0; i < this.getToDeliver(); ++i) {
+            this.getStorage().addLast(this.getFromWarehouse().get());
+        }
+    }
+
+    private void extractThisTrain(Station station) throws InterruptedException {
+        station.getTrainFrom(this);
+    }
+
+    private void deliverProduction() throws InterruptedException {
+        this.busyPath = this.deliveryService.delegateForwardPath();
+
+        final long SECOND_MILLIS = 1000;
+        Thread.sleep(SECOND_MILLIS * this.getBusyPath().getLength());
+        this.decreaseRemaining(this.getBusyPath().getLength());
+        this.deliveryService.getArrivalStation().putTrainInto(this);
+
+        this.deliveryService.getForwardPathBack((ForwardPath) this.getBusyPath());
+        this.busyPath = null;
+    }
+
+    private void bringToArrival() throws InterruptedException {
+        for (int i = 0; i < this.getToDeliver(); ++i) {
+            this.getToWarehouse().put(this.getStorage().poll());
+        }
+    }
+
+    private void getTrainBack() throws InterruptedException {
+        this.busyPath = this.deliveryService.delegateBackwardPath();
+
+        final long SECOND_MILLIS = 1000;
+        Thread.sleep(SECOND_MILLIS * this.getBusyPath().getLength());
+        this.decreaseRemaining(this.getBusyPath().getLength());
+        this.getDeliveryService().getDepartureStation().putTrainInto(this);
+
+        this.deliveryService.getBackwardPathBack((BackwardPath) this.getBusyPath());
+        this.busyPath = null;
     }
 
     @Override
     public void run() {
         while (!this.isInterrupted()) {
-            for (int i = 0; i < this.getToDeliver(); ++i) {
-                try {
-                    this.getStorage().addLast(this.getFromWarehouse().get());
-
-                } catch (InterruptedException e) {
-                    break;
-                }
-            }
-
             try {
-                this.deliveryService.getDepartureStation().getTrainFrom(this);
-                this.busyPath = this.deliveryService.delegateForwardPath();
+                fillTrain();
+                extractThisTrain(deliveryService.getDepartureStation());
+                deliverProduction();
+                bringToArrival();
+                extractThisTrain(deliveryService.getArrivalStation());
+                getTrainBack();
             } catch (InterruptedException e) {
-                break;
-            }
-
-            final long SECOND_MILLIS = 1000;
-            try {
-                Thread.sleep(SECOND_MILLIS * this.getBusyPath().getLength());
-            } catch (InterruptedException e) {
-                break;
-            }
-            this.decreaseRemaining(this.getBusyPath().getLength());
-
-            try {
-                this.deliveryService.getArrivalStation().putTrainInto(this);
-            } catch (InterruptedException e) {
-                break;
-            }
-            this.deliveryService.getForwardPathBack((ForwardPath) this.getBusyPath());
-            this.busyPath = null;
-
-            for (int i = 0; i < this.getToDeliver(); ++i) {
-                try {
-                    this.getToWarehouse().put(this.getStorage().poll());
-                } catch (InterruptedException e) {
-                    break;
-                }
-            }
-
-            try {
-                this.deliveryService.getArrivalStation().getTrainFrom(this);
-                this.busyPath = this.deliveryService.delegateBackwardPath();
-            } catch (InterruptedException e) {
-                break;
-            }
-
-            try {
-                Thread.sleep(SECOND_MILLIS * this.getBusyPath().getLength());
-            } catch (InterruptedException e) {
-                break;
-            }
-            this.decreaseRemaining(this.getBusyPath().getLength());
-
-            try {
-                this.deliveryService.getDepartureStation().putTrainInto(this);
-            } catch (InterruptedException e) {
-                break;
-            }
-            this.deliveryService.getBackwardPathBack((BackwardPath) this.getBusyPath());
-            this.busyPath = null;
-
-            if (!isCapable()) {
-                this.getDeliveryService().getDepartureStation().createTrain(this.getProductType(), this.getToDeliver());
+                return;
             }
         }
     }
 
     public ProductType getProductType() {
         return productType;
-    }
-
-    public int getAmortisation() {
-        return amortisation;
     }
 
     public int getRemaining() {

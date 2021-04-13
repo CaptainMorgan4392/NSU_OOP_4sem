@@ -8,8 +8,7 @@ import production.ProductType;
 import java.util.ArrayDeque;
 
 public abstract class Warehouse {
-    private final Logger departureLogger = LogManager.getLogger(DepartureWarehouse.class);
-    private final Logger arrivalLogger = LogManager.getLogger(ArrivalWarehouse.class);
+    private static final Logger logger = LogManager.getLogger(Warehouse.class);
 
     private final ProductType productType;
     private final int capacity;
@@ -22,17 +21,13 @@ public abstract class Warehouse {
     }
 
     public synchronized void put(Product product) throws InterruptedException {
-        while (this.getProducts().size() == this.capacity) {
+        while (this.products.size() == this.capacity) {
             wait();
         }
 
-        this.getProducts().addLast(product);
+        this.products.addLast(product);
 
-        if (this instanceof DepartureWarehouse) {
-            departureLogger.trace(this.toString());
-        } else {
-            arrivalLogger.trace(this.toString());
-        }
+        logger.trace(this.toString());
 
         notifyAll();
     }
@@ -40,11 +35,13 @@ public abstract class Warehouse {
     public synchronized Product get() throws InterruptedException {
         final int EMPTY = 0;
 
-        while (this.getProducts().size() == EMPTY) {
+        while (this.products.size() == EMPTY) {
             wait();
         }
 
-        Product toExtract = this.getProducts().poll();
+        Product toExtract = this.products.poll();
+
+        logger.trace(this.toString());
 
         notifyAll();
 
@@ -55,20 +52,18 @@ public abstract class Warehouse {
         return productType;
     }
 
-    public int getCapacity() {
+    private int getCapacity() {
         return capacity;
-    }
-
-    public ArrayDeque<Product> getProducts() {
-        return products;
     }
 
     @Override
     public String toString() {
         return "Type of warehouse: "
                 + this.getProductType().getTypeLiteral()
+                + ", point of delivering: "
+                + this.getClass()
                 + ", current stock: "
-                + this.getProducts().size()
+                + this.products.size()
                 + "/"
                 + this.getCapacity();
     }

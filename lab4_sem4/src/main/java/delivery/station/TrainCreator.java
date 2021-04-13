@@ -1,6 +1,5 @@
 package delivery.station;
 
-import delivery.transport.Train;
 import production.ProductType;
 
 public interface TrainCreator {

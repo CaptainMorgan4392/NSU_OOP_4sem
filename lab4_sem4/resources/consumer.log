@@ -1,0 +1,17 @@
+2021-04-13T01:28:10.899+0700 TRACE Product of type: Second with ID: 1 consumed.
+2021-04-13T01:28:10.900+0700 TRACE Product of type: Second with ID: 4 consumed.
+2021-04-13T01:28:12.903+0700 TRACE Product of type: Second with ID: 7 consumed.
+2021-04-13T01:28:13.887+0700 TRACE Product of type: Fourth with ID: 3 consumed.
+2021-04-13T01:28:13.887+0700 TRACE Product of type: Fourth with ID: 6 consumed.
+2021-04-13T01:28:15.899+0700 TRACE Product of type: Third with ID: 8 consumed.
+2021-04-13T01:28:49.239+0700 TRACE Product of type: Second with ID: 4 consumed.
+2021-04-13T01:28:49.239+0700 TRACE Product of type: Second with ID: 2 consumed.
+2021-04-13T01:28:51.243+0700 TRACE Product of type: Second with ID: 8 consumed.
+2021-04-13T01:28:52.234+0700 TRACE Product of type: Fourth with ID: 3 consumed.
+2021-04-13T01:28:52.234+0700 TRACE Product of type: Fourth with ID: 6 consumed.
+2021-04-13T01:28:53.232+0700 TRACE Product of type: First with ID: 5 consumed.
+2021-04-13T01:28:55.236+0700 TRACE Product of type: Fourth with ID: 10 consumed.
+2021-04-13T01:28:56.245+0700 TRACE Product of type: Second with ID: 9 consumed.
+2021-04-13T01:28:56.245+0700 TRACE Product of type: Second with ID: 11 consumed.
+2021-04-13T01:28:56.249+0700 TRACE Product of type: Third with ID: 1 consumed.
+2021-04-13T01:28:57.236+0700 TRACE Product of type: First with ID: 14 consumed.
