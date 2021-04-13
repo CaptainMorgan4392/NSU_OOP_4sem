@@ -85,11 +85,11 @@ public class DepartureStation extends Station implements TrainCreator {
         trainCreationPool.shutdownNow();
 
         for (Train train : trains) {
-            train.stop();
+            train.interrupt();
         }
 
         for (Train train : nowGoing) {
-            train.stop();
+            train.interrupt();
         }
     }
 }

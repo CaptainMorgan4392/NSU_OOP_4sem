@@ -150,13 +150,13 @@ public class Infrastructure {
         logger.trace("ATTENTION! You have destroyed infrastructure!");
 
         for (ConcreteConsumer consumer : consumers) {
-            consumer.stop();
+            consumer.interrupt();
         }
 
         delivery.getDepartureStation().destroyTrains();
 
         for (Factory factory : factories) {
-            factory.stop();
+            factory.interrupt();
         }
     }
 

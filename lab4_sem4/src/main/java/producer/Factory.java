@@ -22,29 +22,20 @@ public class Factory extends Thread implements Producer {
     @Override
     public void run() {
         while (!this.isInterrupted()) {
-            Product created = this.create();
-
-            if (created != null) {
-                logger.trace(created.toString() + "created.");
-
-                try {
-                    this.warehouse.put(created);
-                } catch (InterruptedException e) {
-                    break;
-                }
+            try {
+                Product created = this.create();
+                this.warehouse.put(created);
+            } catch (InterruptedException e) {
+                break;
             }
         }
     }
 
     @Override
-    public Product create() {
+    public Product create() throws InterruptedException {
         final long SECOND_MILLIS = 1000;
 
-        try {
-            Thread.sleep(SECOND_MILLIS * timeToCreate);
-        } catch (InterruptedException e) {
-            return null;
-        }
+        Thread.sleep(SECOND_MILLIS * timeToCreate);
 
         return new Product(this.getProductType());
     }
