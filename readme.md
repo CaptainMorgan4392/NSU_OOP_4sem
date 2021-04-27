@@ -1,6 +1,6 @@
-# Java labs: 3/5
+# Java labs: 4/5
 1) Simple CSV parser: Done     
 2) Workflow Executor: Done    
 3) Game with GUI: Done    
-4) Java Multithreading: Testing...    
-5) Internet Chat: In progress...
+4) Java Multithreading: Done   
+5) Multiplayer chess: In progress...
