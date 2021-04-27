@@ -5,6 +5,8 @@ import model.common.Sign;
 import java.io.Serializable;
 
 public class Request implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private final int rowCoord;
     private final int colCoord;
     private final Sign sign;
